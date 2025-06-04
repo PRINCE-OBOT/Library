@@ -1,13 +1,93 @@
-.book-container{
+:root{
+    --clr-purple-300 :rgb(206, 195, 206); 
+    --clr-purple-100 : rgb(55, 35, 57);
+    --clr-yellow-300 : rgb(242, 215, 43);
+    --clr-yellow-100 : rgb(132, 125, 83);
+    
+    --br-small : 10px;
+    --br-medium : 15px;
+}
+body{
+    font-family: sans-serif;
+}
+.container{
+    width: min(800px, 80%);
+    min-width: 400px;
+    margin: 0 auto 0;
+    padding: 30px;
+    background-color: var(--clr-purple-300);
+    border-radius: var(--br-small);
+    display: grid;
+    grid-template-rows: 100px 50px 1fr;
+    gap: 10px;
+    > h1{
+        color: var(--clr-purple-100);
+        text-shadow: 1px 1px 3px #9c8d9b;
+        text-align: center;
+        font-variant: small-caps;
+        position: relative;
+        > span{
+            display: inline-block;
+            transform: rotate(40deg) translate(2px, 3px);
+        }
+        &::after{
+            content: "?";
+            position: absolute;
+            background-image: linear-gradient(var(--clr-purple-100), var(--clr-purple-300));
+            border-radius: 50%;
+            inset: 55% 42% 10% 54%;
+        }
+    }
+    & > button{
+        font-size: clamp(1rem, 0.8rem + 1vw, 2.5rem);
+        color: var(--clr-purple-100);
+        background-color: var(--clr-yellow-300);
+        box-shadow: 1px 1px 5px var(--clr-purple-100);
+        border-radius: var(--br-small);
+        border: none;
+        > span{
+            font-weight: 900;
+        }
+    }
+}
+
+.main{
+    background-image: linear-gradient(var(--clr-purple-300), var(--clr-yellow-100), var(--clr-purple-300));
+    & > h2{
+        border-bottom: 2px solid var(--clr-purple-100);
+        opacity: 0.7;
+    }
+}
+.unread, .read{
     min-height: 400px;
-    background-color: rgb(219, 99, 219);
-    max-width: 600px;
+    border-radius: var(--br-small);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 30px;
+    padding: 10px;
 }
-.book-cover-page{
-    background-color: lightblue;
+
+.book-container{
     border: 2px solid #433;
     min-height: 400px;
+    position: relative;
+    overflow: hidden;
+    transition: 400ms;
+    border: none;
+    border-radius: var(--br-small);
+    box-shadow: 1px 1px 5px rgba( 0 0 0 / 0.5);
+    & > div{
+        position: absolute;
+        inset: 0;
+        &:last-child{
+            transform: translate(-100%);
+            transition: 300ms;
+        }
+    }
+    &:hover{
+        transform: scale(1.02);
+    }
+    &:hover > div:last-child{
+        transform: translate(0px);
+    }
 }

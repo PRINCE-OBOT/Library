@@ -1,5 +1,6 @@
-const btn = document.querySelector("button");
-const bookContainer = document.querySelector(".book-container");
+const btnAddBook = document.querySelector(".btn-add-book");
+const unread = document.querySelector(".unread");
+const read = document.querySelector(".read");
 
 const myLibrary = [];
 
@@ -22,57 +23,77 @@ function addBookToLibrary(author, title, num_of_pages, isRead, cover_page_img) {
     id: crypto.randomUUID(),
   });
 }
-new addBookToLibrary( "J.J Clark", "Tomorrow too far", 56, true, "./images/1.jpeg"
+new addBookToLibrary( "J.J Clark", "Tomorrow too far", 56, true, "./images/paint.jpeg"
 );
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/1.jpeg"
+new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/laundry-shoe.jpg"
 );
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/1.jpeg"
+new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/laundry-cloth.jpg"
 );
 
-btn.addEventListener("click", handleClick);
+btnAddBook.addEventListener("click", addBook);
 
 let i = 0;
 function generateBook() {
   while (i < myLibrary.length) {
     const bookCoverPage = document.createElement("div");
+    const bookContainer = document.createElement("div");
+    const bookCoverPageImg = document.createElement("div");
     const bookTitle = document.createElement("h3");
     const btnRemoveBook = document.createElement("button");
+    const btnAddToRead = document.createElement("button");
+    const checkIsRead = document.createElement('input');
 
     bookTitle.textContent = myLibrary[i].title;
+
+    bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-purple-300)`; 
+    
+    
     btnRemoveBook.textContent = "Remove Book";
-
+    btnAddToRead.textContent = 'I\'ve Read the Book'
+    
     btnRemoveBook.setAttribute("data-remove-book", myLibrary[i].id);
-
-    bookCoverPage.classList.add("book-cover-page");
-
-    bookCoverPage.append(bookTitle, btnRemoveBook);
-    bookContainer.append(bookCoverPage);
-    console.log(i);
+    btnAddToRead.setAttribute("data-add-to-read", true);
+    
+    bookContainer.classList.add("book-container");
+    
+    bookCoverPage.append(bookTitle, btnAddToRead, btnRemoveBook);
+    bookContainer.append(bookCoverPageImg, bookCoverPage);
+    unread.append(bookContainer)
     i++;
   }
 }
 
 generateBook();
 
-function handleClick() {
+function addBook() {
   new addBookToLibrary(
     "Prince Obot",
     "Yeah I wanted to change you",
     56,
     true,
-    "./images/1.jpeg"
+    "./images/laundry-happy.jpg"
   );
   generateBook();
 }
 
-bookContainer.addEventListener("click", modifyBook);
+unread.addEventListener("click", modifyBook);
 
 function modifyBook(e) {
   let elem = e.target;
+  console.log(elem.dataset);
   if (elem.dataset.removeBook) {
     removeBookFromLibrary(elem.dataset.removeBook);
-    removeBook(elem)
-  }
+    elem.closest(".book-container").remove();
+}
+ if(elem.dataset.addToRead){
+     addToRead(elem)
+     elem.closest(".book-container").remove();
+    }
+}
+
+function addToRead(elem){
+    read.append(elem.closest('.book-container').cloneNode(true))
+    console.log(read.children[0].children)
 }
 
 function removeBookFromLibrary(id) {
@@ -83,9 +104,5 @@ function removeBookFromLibrary(id) {
       break;
     }
   }
-}
-
-function removeBook(elem){
-    elem.parentNode.remove()
 }
 
