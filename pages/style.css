@@ -1,0 +1,13 @@
+.book-container{
+    min-height: 400px;
+    background-color: rgb(219, 99, 219);
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.book-cover-page{
+    background-color: lightblue;
+    border: 2px solid #433;
+    min-height: 400px;
+}
