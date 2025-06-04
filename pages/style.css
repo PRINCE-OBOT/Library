@@ -1,25 +1,32 @@
 :root{
-    --clr-purple-300 :rgb(206, 195, 206); 
+    --clr-purple-300 :rgb(254, 246, 254); 
     --clr-purple-100 : rgb(55, 35, 57);
     --clr-yellow-300 : rgb(242, 215, 43);
     --clr-yellow-100 : rgb(132, 125, 83);
+    --clr-white : #f3eaea;
+    --clr-black-800 : rgb(19, 14, 20, 0.7);
     
     --br-small : 10px;
     --br-medium : 15px;
+}
+*, *::before, *::after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 body{
     font-family: sans-serif;
 }
 .container{
-    width: min(800px, 80%);
+    width: min(600px, 90%);
     min-width: 500px;
     margin: 0 auto 0;
     padding: 30px;
     background-color: var(--clr-purple-300);
     border-radius: var(--br-small);
     display: grid;
-    grid-template-rows: 100px 50px 1fr;
-    gap: 10px;
+    grid-template-rows: 70px 50px 1fr;
+    gap: 20px;
     > h1{
         color: var(--clr-purple-100);
         text-shadow: 1px 1px 3px #9c8d9b;
@@ -35,7 +42,7 @@ body{
             position: absolute;
             background-image: linear-gradient(var(--clr-purple-100), var(--clr-purple-300));
             border-radius: 50%;
-            inset: 55% 42% 10% 54%;
+            inset: 42% 40.5% 25% 55%;
         }
     }
     & > button{
@@ -58,6 +65,9 @@ body{
         opacity: 0.7;
     }
 }
+.title-read{
+    margin-top: 40px;
+}
 .unread, .read{
     min-height: 400px;
     border-radius: var(--br-small);
@@ -79,9 +89,33 @@ body{
     & > div{
         position: absolute;
         inset: 0;
+        border: none;
         &:last-child{
+            background: rgba(0 0 0 / 0.7);
             transform: translate(-100%);
             transition: 300ms;
+            display: grid;
+            align-content : end;
+            grid-template-rows: 1fr repeat(4, 50px);
+            color: var(--clr-yellow-100);
+            text-align: center;
+            color: var(--clr-white);
+            padding: 10px;
+            & > h3{
+                align-self: flex-end;
+                outline: 2px solid var(--clr-white);
+                outline-offset: 4px;
+                padding: 5px 15px;
+                border-radius: var(--br-small);
+                background-color: var(--clr-black-800);
+                & + *{
+                    margin-top: 20px;
+                }
+            }
+            & > button{
+                color: var(--clr-purple-100);
+                border-radius: var(--br-small);
+            }
         }
     }
     &:hover{

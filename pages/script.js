@@ -5,30 +5,28 @@ const read = document.querySelector(".read");
 
 const myLibrary = [];
 
-function Book(author, title, num_of_pages, isRead, cover_page_img) {
+function Book(author, title, num_of_pages, cover_page_img) {
   this.author = author;
   this.title = title;
   this.num_of_pages = num_of_pages;
-  this.isRead = isRead;
   this.cover_page_img = cover_page_img;
 }
 
-function addBookToLibrary(author, title, num_of_pages, isRead, cover_page_img) {
-  Book.call(this, author, title, num_of_pages, isRead, cover_page_img);
+function addBookToLibrary(author, title, num_of_pages, cover_page_img) {
+  Book.call(this, author, title, num_of_pages, cover_page_img);
   myLibrary.push({
     author: author,
     title: title,
     num_of_pages: num_of_pages,
-    isRead: isRead,
     cover_page_img: cover_page_img,
     id: crypto.randomUUID(),
   });
 }
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/paint.jpeg"
+new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/paint.jpeg"
 );
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/laundry-shoe.jpg"
+new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-shoe.jpg"
 );
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,true,"./images/laundry-cloth.jpg"
+new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-cloth.jpg"
 );
 
 btnAddBook.addEventListener("click", addBook);
@@ -36,27 +34,29 @@ btnAddBook.addEventListener("click", addBook);
 let i = 0;
 function generateBook() {
   while (i < myLibrary.length) {
-    const bookCoverPage = document.createElement("div");
     const bookContainer = document.createElement("div");
+    const bookCoverPage = document.createElement("div");
     const bookCoverPageImg = document.createElement("div");
     const bookTitle = document.createElement("h3");
+    const bookAuthor = document.createElement('h4')
+    const bookNumOfPage = document.createElement('h5')
     const btnRemoveBook = document.createElement("button");
     const btnAddToRead = document.createElement("button");
-    const checkIsRead = document.createElement("input");
 
-    bookTitle.textContent = myLibrary[i].title;
-
-    bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-purple-300)`;
-
+    bookTitle.textContent = `Title: ${myLibrary[i].title}`;
+    bookAuthor.textContent = `Author: ${myLibrary[i].author}`
+    bookNumOfPage.textContent = `Number of Pages: ${myLibrary[i].num_of_pages}`
     btnRemoveBook.textContent = "Remove Book";
     btnAddToRead.textContent = "I've Read the Book";
+
+    bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-purple-300)`;
 
     btnRemoveBook.setAttribute("data-remove-book", myLibrary[i].id);
     btnAddToRead.setAttribute("data-button-id", "addToRead");
 
     bookContainer.classList.add("book-container");
 
-    bookCoverPage.append(bookTitle, btnAddToRead, btnRemoveBook);
+    bookCoverPage.append(bookTitle, bookAuthor, bookNumOfPage, btnAddToRead, btnRemoveBook);
     bookContainer.append(bookCoverPageImg, bookCoverPage);
     unread.append(bookContainer);
     i++;
@@ -68,7 +68,7 @@ generateBook();
 function addBook() {
   new addBookToLibrary(
     "Prince Obot",
-    "Yeah I wanted to change you",
+    "Yeah I wanted to change you but then i wanted to see if the content will stop",
     56,
     true,
     "./images/laundry-happy.jpg"
