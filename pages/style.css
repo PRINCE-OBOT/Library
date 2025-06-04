@@ -12,7 +12,7 @@ body{
 }
 .container{
     width: min(800px, 80%);
-    min-width: 400px;
+    min-width: 500px;
     margin: 0 auto 0;
     padding: 30px;
     background-color: var(--clr-purple-300);
