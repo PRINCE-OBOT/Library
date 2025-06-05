@@ -1,5 +1,5 @@
 :root{
-    --clr-purple-300 :rgb(254, 246, 254); 
+    --clr-purple-300 :rgb(161, 157, 150); 
     --clr-purple-100 : rgb(55, 35, 57);
     --clr-yellow-300 : rgb(242, 215, 43);
     --clr-yellow-100 : rgb(132, 125, 83);
@@ -69,7 +69,7 @@ body{
     margin-top: 40px;
 }
 .unread, .read{
-    min-height: 400px;
+    min-height: 100px;
     border-radius: var(--br-small);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -124,4 +124,29 @@ body{
     &:hover > div:last-child{
         transform: translate(0px);
     }
+}
+dialog{
+    margin: 0 auto 0;
+}
+form{
+    padding: 20px;
+    display: grid;
+    row-gap: 20px;
+    min-height: 300px;
+    
+    & > div{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+form label{
+    
+}
+form input{
+    border-radius: var(--br-small);
+    min-height: 40px;
+}
+::backdrop{
+    background-color: rgba(0 0 0 / 0.7);
 }
