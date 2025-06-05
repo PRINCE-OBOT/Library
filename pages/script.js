@@ -31,13 +31,14 @@ function addBookToLibrary(author, title, num_of_pages, cover_page_img) {
     num_of_pages: num_of_pages,
     cover_page_img: cover_page_img,
     id: crypto.randomUUID(),
-  });
+});
 }
 new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/paint.jpeg");
 new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-shoe.jpg");
 new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-cloth.jpg");
 
 
+let i = 0;
 function GenerateBook(isRead, text, btnId) {
     this.isRead = isRead
     this.text = text
@@ -59,8 +60,7 @@ function GenerateBook(isRead, text, btnId) {
         btnRemoveBook.textContent = "Remove Book";
         btnAddToRead.innerHTML = this.text;
         
-        // bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-purple-300)`;
-        bookCoverPageImg.style.background = `url(./images/laundry-happy.jpg) 0 0 / cover no-repeat var(--clr-purple-300)`;
+        bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-purple-300)`;
         
         btnRemoveBook.setAttribute("data-remove-book", myLibrary[i].id);
         btnAddToRead.setAttribute("data-button-id", this.btnId);
@@ -73,14 +73,14 @@ function GenerateBook(isRead, text, btnId) {
     }
 }
 
-let i = 0;
+let generateUnreadBook;
 while (i < myLibrary.length) {
-    if(i > 1){
-        const generateUnreadBook = new GenerateBook(unread, unreadText, unreadBtnId)
-        generateUnreadBook.generateBook()
-    } else {
+    if(i > 0){
         const generateReadBook = new GenerateBook(read, readText, readBtnId) 
         generateReadBook.generateBook()
+    } else {
+        generateUnreadBook = new GenerateBook(unread, unreadText, unreadBtnId)
+        generateUnreadBook.generateBook()
     }
     i++;
 }
@@ -90,12 +90,12 @@ function addBook() {
         "Prince Obot",
         "Yeah I wanted to change you but then i wanted to see if the content will stop",
         56,
-        true,
         "./images/laundry-happy.jpg"
     );
-    const generateUnreadBook = new GenerateBook(unread, unreadText, unreadBtnId);
+    
     generateUnreadBook.generateBook();
     isUnreadEmpty()
+    i++
 }
 
 
@@ -122,15 +122,17 @@ function modifyBook(e) {
     removeBookFromLibrary(elem.dataset.removeBook);
     elem.closest(".book-container").remove();
     isUnreadEmpty()
-    // isReadEmpty()
+    isReadEmpty()
 }
 if (elem.dataset.buttonId == unreadBtnId) {
     const addToRead = new ReadState(read, readBtnId, readText);
     addToRead.applyClone(elem);
     isUnreadEmpty()
+    isReadEmpty()
 } else if (elem.dataset.buttonId == readBtnId) {
     const addToUnread = new ReadState(unread, unreadBtnId, unreadText);
     addToUnread.applyClone(elem);
+    isUnreadEmpty()
     isReadEmpty()
   }
 }
@@ -152,7 +154,7 @@ function isReadEmpty(){
         readIsEmpty = new Empty(read, true);
         readIsEmpty.setText();
     } else if (readIsEmpty.isSetText && readLen == 2) {
-        readIsEmpty = new Empty(_, false);
+        readIsEmpty = new Empty(read, false);
         read.querySelector('.empty').remove()
     }
 }
@@ -161,10 +163,6 @@ let unreadIsEmpty = new Empty()
 function isUnreadEmpty(){
     const unreadLen = [...unread.children].length;
 
-    console.log([...unread.children])
-    console.log(unread.children.length)
-    
-    
     if (unreadLen === 0) {
         unreadIsEmpty = new Empty(unread, true);
         unreadIsEmpty.setText();
@@ -172,9 +170,6 @@ function isUnreadEmpty(){
         unreadIsEmpty = new Empty(unread, false);
         unread.querySelector('.empty').remove()
     }
-    
-    console.log([...unread.children])
-    console.log(unread.children.length)
 }
 
 function removeBookFromLibrary(id) {
