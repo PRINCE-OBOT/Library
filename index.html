@@ -13,7 +13,7 @@
         <button class="btn-add-book"><span>+</span> Add book</button>
             
         <div class="main">
-            <h2>Unread (Pending)</h2>
+            <h2 class="unread-title">Unread (Pending)</h2>
             <div class="unread">
             </div>
             <h2 class="title-read">Read (Completed)</h2>
@@ -21,27 +21,31 @@
             </div>
         </div>
     </div>
-    <dialog>
+    <dialog closedby="any">
     <form action="" id="book-form">
         <div>
             <label for="author">Author</label>
-            <input type="text" id="author">
+            <input type="text" id="author" placeholder="Prince" required>
         </div>
         <div>
             <label for="title">Title</label>
-            <input type="text" id="title">
+            <input type="text" id="title" placeholder="Tomorrow Too Far" required>
         </div>
         <div>
             <label for="num_of_pages">Number of Pages</label>
-            <input type="number" id="num_of_pages">
+            <input type="number" id="num_of_pages" placeholder="35" required>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="is-read">
+            <label for="is-read">Check <em>if</em> you have read the book</label>
         </div>
         <div>
-            <label for="is-read">Have you read the book?</label>
-            <input type="checkbox">
+            <label for="img_cover_page">Include book cover page (provide img src path)</label>
+            <input type="text" id="img_cover_page" placeholder="url image path">
         </div>
         <div>
-            <label for="img">Include book cover page (provide img src path)</label>
-            <input type="text">
+            <button class="btn-cancel" type="button">Cancel</button>
+            <button class="btn-submit" formmethod="dialog" value="submit">Submit</button>
         </div>
     </form>
     </dialog>

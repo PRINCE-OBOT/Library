@@ -1,20 +1,28 @@
-const btnAddBook = document.querySelector(".btn-add-book");
-const main = document.querySelector(".main");
-const unread = document.querySelector(".unread");
-const read = document.querySelector(".read");
-const dialog = document.querySelector('dialog')
-const form = document.querySelector('form')
-
 const myLibrary = [];
 
 const unreadText = "Click <em>if</em> you've read the book"
 const unreadBtnId = "addToRead"
 const readBtnId = 'undo'
-const readText = "Undo"
+const readText = "Click if you've <em>not</em> read"
 
-btnAddBook.addEventListener("click", addBook);
+const btnAddBook = document.querySelector(".btn-add-book");
+const main = document.querySelector(".main");
+const unread = document.querySelector(".unread");
+const read = document.querySelector(".read");
+const dialog = document.querySelector('dialog')
+const btnCancel = document.querySelector('.btn-cancel')
+const btnSubmit = document.querySelector('.btn-submit')
+
+btnAddBook.addEventListener("click", ()=>{
+    dialog.showModal();
+});
+
 main.addEventListener("click", modifyBook);
+btnCancel.addEventListener('click', (e)=>{
+    dialog.close(e.target.textContent)
+})
 
+dialog.addEventListener('close', submitBookDetails)
 
 function Book(author, title, num_of_pages, cover_page_img) {
   this.author = author;
@@ -36,7 +44,6 @@ function addBookToLibrary(author, title, num_of_pages, cover_page_img) {
 new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/paint.jpeg");
 new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-shoe.jpg");
 new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-cloth.jpg");
-
 
 let i = 0;
 function GenerateBook(isRead, text, btnId) {
@@ -72,11 +79,11 @@ function GenerateBook(isRead, text, btnId) {
         this.isRead.append(bookContainer);
     }
 }
-
-let generateUnreadBook;
+// Manual Generated book - Set some book to `unread (Pending)` and some to `read (Completed)` container
+let generateUnreadBook, generateReadBook;
 while (i < myLibrary.length) {
     if(i > 0){
-        const generateReadBook = new GenerateBook(read, readText, readBtnId) 
+        generateReadBook = new GenerateBook(read, readText, readBtnId) 
         generateReadBook.generateBook()
     } else {
         generateUnreadBook = new GenerateBook(unread, unreadText, unreadBtnId)
@@ -85,19 +92,29 @@ while (i < myLibrary.length) {
     i++;
 }
 
-function addBook() {
-    new addBookToLibrary(
-        "Prince Obot",
-        "Yeah I wanted to change you but then i wanted to see if the content will stop",
-        56,
-        "./images/laundry-happy.jpg"
-    );
-    
-    generateUnreadBook.generateBook();
-    isUnreadEmpty()
-    i++
-}
 
+function submitBookDetails(e) {
+  e.preventDefault()
+  if(dialog.returnValue !== 'submit') return
+  dialog.returnValue = null
+  const form = document.querySelector("form").elements;
+  const book = {
+    author: form[0].value,
+    title: form[1].value,
+    num_of_pages: form[2].value,
+    isRead: form[3].checked,
+    imgCoverPage: form[4].value,
+  };
+
+  new addBookToLibrary(book.author,book.title,book.num_of_pages,book.imgCoverPage);
+  if(book.isRead){
+      generateReadBook.generateBook()
+    } else{
+      generateUnreadBook.generateBook();
+  }
+  checkIfUnreadIsEmpty()
+  i++
+}
 
 function ReadState(isRead, buttonId, text) {
   this.isRead = isRead;
@@ -121,19 +138,19 @@ function modifyBook(e) {
   if (elem.dataset.removeBook) {
     removeBookFromLibrary(elem.dataset.removeBook);
     elem.closest(".book-container").remove();
-    isUnreadEmpty()
-    isReadEmpty()
+    checkIfUnreadIsEmpty()
+    checkIfReadIsEmpty()
 }
 if (elem.dataset.buttonId == unreadBtnId) {
     const addToRead = new ReadState(read, readBtnId, readText);
     addToRead.applyClone(elem);
-    isUnreadEmpty()
-    isReadEmpty()
+    checkIfUnreadIsEmpty()
+    checkIfReadIsEmpty()
 } else if (elem.dataset.buttonId == readBtnId) {
     const addToUnread = new ReadState(unread, unreadBtnId, unreadText);
     addToUnread.applyClone(elem);
-    isUnreadEmpty()
-    isReadEmpty()
+    checkIfUnreadIsEmpty()
+    checkIfReadIsEmpty()
   }
 }
 
@@ -147,7 +164,7 @@ function Empty(isRead, isSetText){
 }
 
 let readIsEmpty = new Empty()
-function isReadEmpty(){
+function checkIfReadIsEmpty(){
     const readLen = [...read.children].length;
     
     if (readLen == 0) {
@@ -160,7 +177,7 @@ function isReadEmpty(){
 }
 
 let unreadIsEmpty = new Empty()
-function isUnreadEmpty(){
+function checkIfUnreadIsEmpty(){
     const unreadLen = [...unread.children].length;
 
     if (unreadLen === 0) {
