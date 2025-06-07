@@ -55,7 +55,7 @@ body{
 .title-read, .unread-title{
     border-bottom: 2px solid var(--clr-purple-100);
     margin-top: 40px;
-    color: var(--clr-black-800);
+    color: var(--clr-white);
 }
 .unread, .read{
     min-height: 100px;
