@@ -38,9 +38,6 @@ body{
             display: inline-block;
             transform: rotate(40deg) translate(10px, 18px);
         }
-        &::after{
-            content: "";
-        }
     }
     & > button{
         font-size: clamp(1rem, 0.8rem + 1vw, 2.5rem);
@@ -73,7 +70,7 @@ body{
     position: absolute;
     inset: 40%;
     font-size: 4rem;
-    opacity: 0.3;
+    opacity: 0.8;
 }
 
 .book-container{

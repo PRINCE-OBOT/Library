@@ -92,7 +92,6 @@ while (i < myLibrary.length) {
     i++;
 }
 
-
 function submitBookDetails(e) {
   e.preventDefault()
   if(dialog.returnValue !== 'submit') return
