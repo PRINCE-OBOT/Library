@@ -41,9 +41,9 @@ function addBookToLibrary(author, title, num_of_pages, cover_page_img) {
     id: crypto.randomUUID(),
 });
 }
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/paint.jpeg");
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-shoe.jpg");
-new addBookToLibrary("J.J Clark","Tomorrow too far",56,"./images/laundry-cloth.jpg");
+new addBookToLibrary("Joanne Hichens","The Bed Book of Short Stories",56,"./images/images.jpg");
+new addBookToLibrary("Nandini Nayar","The Story School",43,"./images/images-1.jpg");
+new addBookToLibrary("Richard Girling","The Longest Story",1560,"./images/images-2.jpg");
 
 let i = 0;
 function GenerateBook(isRead, text, btnId) {
@@ -67,7 +67,7 @@ function GenerateBook(isRead, text, btnId) {
         btnRemoveBook.textContent = "Remove Book";
         btnAddToRead.innerHTML = this.text;
         
-        bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-purple-300)`;
+        bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-yellow-100)`;
         
         btnRemoveBook.setAttribute("data-remove-book", myLibrary[i].id);
         btnAddToRead.setAttribute("data-button-id", this.btnId);
@@ -113,6 +113,11 @@ function submitBookDetails(e) {
       generateUnreadBook.generateBook();
   }
   checkIfUnreadIsEmpty()
+  form[0].value = ""
+  form[1].value = ""
+  form[2].value = ""
+  form[3].checked = false
+  form[4].value = ""
   i++
 }
 
@@ -159,7 +164,7 @@ function Empty(isRead, isSetText){
     this.isSetText = isSetText
 
     this.setText = function(){
-        this.isRead.innerHTML = `<div class="empty">Empty</div>`
+        this.isRead.innerHTML = `<div class="empty">&#128722;</div>`
     }
 }
 

@@ -3,7 +3,7 @@
     --clr-purple-100 : rgb(42, 37, 5);
     --clr-yellow-300 : rgb(242, 215, 43);
     --clr-yellow-100 : rgb(132, 125, 83);
-    --clr-white : #f3eaea;
+    --clr-white : #fff;
     --clr-black-800 : rgb(19, 14, 20, 0.7);
     
     --br-small : 10px;
@@ -17,7 +17,6 @@
 body{
     font-family: sans-serif;
     padding: 20px;
-    background-image : linear-gradient(var(--clr-purple-300), var(--clr-purple-300));
 }
 .container{
     width: min(600px, 90%);
@@ -26,6 +25,7 @@ body{
     padding: 30px;
     border-radius: var(--br-small);
     border: 2px solid var(--clr-yellow-100);
+    background: url(../images/container-background.jpg) no-repeat 0 0 / auto 100%;
     display: grid;
     grid-template-rows: 70px 50px 1fr;
     gap: 20px;
@@ -34,17 +34,12 @@ body{
         text-shadow: 1px 1px 3px #9c8d9b;
         text-align: center;
         font-variant: small-caps;
-        position: relative;
         > span{
             display: inline-block;
-            transform: rotate(40deg) translate(2px, 3px);
+            transform: rotate(40deg) translate(10px, 18px);
         }
         &::after{
-            content: "?";
-            position: absolute;
-            background-color: var(--clr-purple-100);
-            border-radius: 50%;
-            inset: 42% 40.5% 25% 55%;
+            content: "";
         }
     }
     & > button{
@@ -60,14 +55,8 @@ body{
     }
 }
 
-.main{
-    background-image: linear-gradient(var(--clr-purple-300), var(--clr-yellow-100), var(--clr-purple-300));
-    & > h2{
-        border-bottom: 2px solid var(--clr-purple-100);
-        opacity: 0.7;
-    }
-}
 .title-read, .unread-title{
+    border-bottom: 2px solid var(--clr-purple-100);
     margin-top: 40px;
     color: var(--clr-black-800);
 }
@@ -83,9 +72,8 @@ body{
 .empty{
     position: absolute;
     inset: 40%;
-    font-weight: 900;
-    font-size: 2rem;
-    color: #433;
+    font-size: 4rem;
+    opacity: 0.3;
 }
 
 .book-container{
@@ -155,6 +143,14 @@ dialog:open{
         transform: translate(-50%, -100%);
     }
 }
+dialog::backdrop{
+    background-color: rgba(0 0 0 / 0);
+    transition: 400ms;
+}
+dialog:open::backdrop{
+    backdrop-filter: blur(8px);
+    background-color: rgba( 0 0 0 / 0.5);
+}
 form{
     background-color: var(--clr-white);
     padding: 50px 30px;
@@ -176,6 +172,15 @@ form{
             transform: scale(1.5);
         }
     }
+}
+button{
+    transition: all 400ms;
+}
+button:active{
+    opacity: 0.4;
+}
+button:hover{
+    opacity: 0.8;
 }
 .btn-submit, .btn-cancel{
     padding: 10px;
@@ -201,7 +206,4 @@ form input:not([type="checkbox"]){
         outline: none;
         box-shadow: 1px 1px 15px rgba(16, 18, 74, 0.5);
     }
-}
-::backdrop{
-    background-color: rgba(0 0 0 / 0.7);
 }
