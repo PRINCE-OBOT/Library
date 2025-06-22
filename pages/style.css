@@ -99,6 +99,7 @@ body{
 .container{
     position: relative;
     min-width: fit-content;
+    margin: 0 auto 0;
 }
 header{
     min-height: 100px;
@@ -266,7 +267,7 @@ ul,li{
         display: flex;
         flex-direction: column;
         gap: var(--gap-sm);
-        width: 80%;
+        width: 90%;
         &:not(.button-form){
             border-left: 2px solid var(--black);
             border-radius: var(--br-sm);
@@ -274,7 +275,7 @@ ul,li{
         }
     }
     & input:not(input[type="checkbox"]){
-        height: 40px;
+        height: 47px;
         border-radius: var(--br-sm);
         border: none;
         box-shadow: var(--box-shadow-form);
