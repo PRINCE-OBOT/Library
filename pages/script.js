@@ -1,204 +1,145 @@
-const myLibrary = [];
+class BookDetails {
+  constructor(author, title, numberOfPages, isRead, coverPageBgImg, id, bookRate) {
+    this.author = author;
+    this.title = title;
+    this.numberOfPages = numberOfPages;
+    this.isRead = isRead;
+    this.coverPageBg = coverPageBgImg;
+    this.id = id
+    this.bookRate = bookRate
+  }
+}
 
-const unreadText = "Click <em>if</em> you've read the book"
-const unreadBtnId = "addToRead"
-const readBtnId = 'undo'
-const readText = "Click if you've <em>not</em> read"
+ const books = [
+   new BookDetails("Nandini Nayar","The Story School","45",true,"../images/images-1.jpg", crypto.randomUUID(), 4),
+   new BookDetails("Richard Girling","The Longest Story","1902", false,"../images/images-2.jpg",crypto.randomUUID(), 1),
+   new BookDetails("Luke Jonah","The Bed Book of Short Stories","89", true,"../images/images.jpg",crypto.randomUUID(), 5)
+ ];
 
-const btnAddBook = document.querySelector(".btn-add-book");
-const main = document.querySelector(".main");
-const unread = document.querySelector(".unread");
-const read = document.querySelector(".read");
-const dialog = document.querySelector('dialog')
-const btnCancel = document.querySelector('.btn-cancel')
-const btnSubmit = document.querySelector('.btn-submit')
+  const bookContainer = document.querySelector('.book-container')
+  const bookTemplate = document.querySelector("#book-template");
+  const dialogBookForm = document.querySelector(".dialog-book-form");
+  const bookForm = document.querySelector('.book-form')
 
-btnAddBook.addEventListener("click", ()=>{
-    dialog.showModal();
-});
+books.forEach(addBookToPage)
+// functions
+function addBookToPage(bookDetails){
+    const book = getBookCardTemplateContent(bookTemplate);
+    const coverPageBgImg = book.querySelector(".cover-page-bg-img");
+    const author = book.querySelector('.author')
+    const title = book.querySelector('.title')
+    const numOfPage = book.querySelector(".num-of-page");
+    const readStatus = book.querySelector(".read-status");
+    const displayReadStatus = book.querySelector('.display-read-status')
+    const star = book.querySelector('.star')
 
-main.addEventListener("click", modifyBook);
-btnCancel.addEventListener('click', (e)=>{
-    dialog.close(e.target.textContent)
+    book.id = bookDetails.id
+    coverPageBgImg.style.background = `url(${bookDetails.coverPageBg}) 0 0 / cover no-repeat content-box var(--dark-grey)`;
+    author.textContent = bookDetails.author
+    title.textContent = bookDetails.title
+    numOfPage.textContent = bookDetails.numberOfPages
+    readStatus.checked = bookDetails.isRead ? true : false
+    displayReadStatus.textContent = getReadStatus(readStatus.checked)
+    if(readStatus.checked){
+      bookRate(getBook(star), bookDetails.bookRate)
+    } else if(!readStatus.checked){
+      removeAllRating(getBook(star))
+    }
+
+    bookContainer.insertAdjacentElement('afterBegin',book)
+}
+
+function getBookCardTemplateContent(bookTemplate){
+  return bookTemplate.content.querySelector('.book').cloneNode(true)
+}
+
+function addBook({author, title, numOfPage, readStatus, coverPageBg}){
+  books.unshift(new BookDetails(author, title, numOfPage, readStatus, coverPageBg, crypto.randomUUID()));
+  addBookToPage(books[0])
+}
+
+function findIndexOfBookInArr(bookId){
+  return books.findIndex((book)=> book.id === bookId )
+}
+
+function removeBook({book, bookId}){
+  book.remove()
+  books.splice(findIndexOfBookInArr(bookId), 1)
+}
+
+function getBook(target){
+  const book = target.closest('.book')
+  return {book, bookId : book.getAttribute('id')}
+}
+
+function getReadStatus(readStatus){
+  return readStatus ? "Read" : "Not read";
+}
+
+function displayReadStatus({book, bookId}, readStatus){
+  book.querySelector('.display-read-status').textContent = getReadStatus(readStatus)
+  books[findIndexOfBookInArr(bookId)].isRead = readStatus
+}
+
+function bookRate({book, bookId}, rate){
+  book.querySelectorAll('.star').forEach((star)=> star.classList.toggle('fill-star', star.dataset.index <= rate));
+  books[findIndexOfBookInArr(bookId)].bookRate = rate
+}
+function removeAllRating({book, bookId}){
+  const voidRating = 0
+  book.querySelectorAll('.star').forEach((star)=> star.classList.remove('fill-star'));
+  books[findIndexOfBookInArr(bookId)].bookRate = voidRating
+}
+function checkIfInputMeetRequirement(){
+  const requiredInput = dialogBookForm.querySelectorAll("input[required]")
+  for(const input of requiredInput){
+    if(input.value.trim() === '') return 'empty'
+    if(input.type === 'number'){
+      const num = +input.value
+      if(isNaN(num) || typeof num != 'number') return "empty";
+    } 
+  }
+}
+
+function clearInput({author, title, numOfPage, readStatus, coverPageBg}){
+  author.value = ''
+  title.value = ''
+  numOfPage.value = ''
+  readStatus.checked = false
+  coverPageBg.value = ''
+}
+
+// Event Listener for `modifying book`
+bookContainer.addEventListener('click', (e)=>{
+  if (e.target.classList.contains("icon-remove")) {
+    removeBook(getBook(e.target));
+  }
+  if (e.target.classList.contains("read-status")) {
+    displayReadStatus(getBook(e.target), e.target.checked);
+    if(!e.target.checked) removeAllRating(getBook(e.target))
+  }
+  if(e.target.classList.contains('star')){
+    const {bookId} = getBook(e.target)
+    if (!books[findIndexOfBookInArr(bookId)].isRead) {
+      alert("You have to read the book before rating it");
+      return;
+    } 
+    bookRate(getBook(e.target), +e.target.dataset.index)
+  }
+  if(e.target.classList.contains('btn-add-book')){
+    dialogBookForm.showModal()
+  }
 })
-
-dialog.addEventListener('close', submitBookDetails)
-
-function Book(author, title, num_of_pages, cover_page_img) {
-  this.author = author;
-  this.title = title;
-  this.num_of_pages = num_of_pages;
-  this.cover_page_img = cover_page_img;
-}
-
-function addBookToLibrary(author, title, num_of_pages, cover_page_img) {
-  Book.call(this, author, title, num_of_pages, cover_page_img);
-  myLibrary.push({
-    author: author,
-    title: title,
-    num_of_pages: num_of_pages,
-    cover_page_img: cover_page_img,
-    id: crypto.randomUUID(),
-});
-}
-new addBookToLibrary("Joanne Hichens","The Bed Book of Short Stories",56,"./images/images.jpg");
-new addBookToLibrary("Nandini Nayar","The Story School",43,"./images/images-1.jpg");
-new addBookToLibrary("Richard Girling","The Longest Story",1560,"./images/images-2.jpg");
-
-let i = 0;
-function GenerateBook(isRead, text, btnId) {
-    this.isRead = isRead
-    this.text = text
-    this.btnId = btnId
-
-    this.generateBook = function(){
-        const bookContainer = document.createElement("div");
-        const bookCoverPage = document.createElement("div");
-        const bookCoverPageImg = document.createElement("div");
-        const bookTitle = document.createElement("h3");
-        const bookAuthor = document.createElement('h4')
-        const bookNumOfPage = document.createElement('h5')
-        const btnRemoveBook = document.createElement("button");
-        const btnAddToRead = document.createElement("button");
-        
-        bookTitle.textContent = `Title: ${myLibrary[i].title}`;
-        bookAuthor.textContent = `Author: ${myLibrary[i].author}`
-        bookNumOfPage.textContent = `Number of Pages: ${myLibrary[i].num_of_pages}`
-        btnRemoveBook.textContent = "Remove Book";
-        btnAddToRead.innerHTML = this.text;
-        
-        bookCoverPageImg.style.background = `url(${myLibrary[i].cover_page_img}) 0 0 / cover no-repeat var(--clr-yellow-100)`;
-        
-        btnRemoveBook.setAttribute("data-remove-book", myLibrary[i].id);
-        btnAddToRead.setAttribute("data-button-id", this.btnId);
-        
-        bookContainer.classList.add("book-container");
-        
-        bookCoverPage.append(bookTitle, bookAuthor, bookNumOfPage, btnAddToRead, btnRemoveBook);
-        bookContainer.append(bookCoverPageImg, bookCoverPage);
-        this.isRead.append(bookContainer);
-    }
-}
-// Manual Generated book - Set some book to `unread (Pending)` and some to `read (Completed)` container
-let generateUnreadBook, generateReadBook;
-while (i < myLibrary.length) {
-    if(i > 0){
-        generateReadBook = new GenerateBook(read, readText, readBtnId) 
-        generateReadBook.generateBook()
-    } else {
-        generateUnreadBook = new GenerateBook(unread, unreadText, unreadBtnId)
-        generateUnreadBook.generateBook()
-    }
-    i++;
-}
-
-function submitBookDetails(e) {
-  e.preventDefault()
-  if(dialog.returnValue !== 'submit') return
-  dialog.returnValue = null
-  const form = document.querySelector("form").elements;
-  const book = {
-    author: form[0].value,
-    title: form[1].value,
-    num_of_pages: form[2].value,
-    isRead: form[3].checked,
-    imgCoverPage: form[4].value,
-  };
-
-  new addBookToLibrary(book.author,book.title,book.num_of_pages,book.imgCoverPage);
-  if(book.isRead){
-      generateReadBook.generateBook()
-    } else{
-      generateUnreadBook.generateBook();
+// Event listener for `book form`
+bookForm.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('send')){
+    if(checkIfInputMeetRequirement() === 'empty') return
+    const [author, title, numOfPage, readStatus, coverPageBg] = bookForm.elements
+    addBook({author : author.value, title : title.value, numOfPage : numOfPage.value, readStatus : readStatus.checked, coverPageBg : coverPageBg.value})
+    dialogBookForm.close()
+    clearInput({author, title, numOfPage, readStatus, coverPageBg})
   }
-  checkIfUnreadIsEmpty()
-  form[0].value = ""
-  form[1].value = ""
-  form[2].value = ""
-  form[3].checked = false
-  form[4].value = ""
-  i++
-}
-
-function ReadState(isRead, buttonId, text) {
-  this.isRead = isRead;
-  this.buttonId = buttonId;
-  this.text = text
-  this.btn = null
-  this.cloneBook = null
-
-  this.applyClone = function (elem) {
-    this.cloneBook = elem.closest(".book-container").cloneNode(true);
-    this.btn = this.cloneBook.querySelector(`[data-button-id]`)
-    this.btn.setAttribute("data-button-id", this.buttonId)
-    this.btn.innerHTML = this.text
-    this.isRead.append(this.cloneBook)
-    elem.closest(".book-container").remove();
-  };
-}
-
-function modifyBook(e) {
-  let elem = e.target;
-  if (elem.dataset.removeBook) {
-    removeBookFromLibrary(elem.dataset.removeBook);
-    elem.closest(".book-container").remove();
-    checkIfUnreadIsEmpty()
-    checkIfReadIsEmpty()
-}
-if (elem.dataset.buttonId == unreadBtnId) {
-    const addToRead = new ReadState(read, readBtnId, readText);
-    addToRead.applyClone(elem);
-    checkIfUnreadIsEmpty()
-    checkIfReadIsEmpty()
-} else if (elem.dataset.buttonId == readBtnId) {
-    const addToUnread = new ReadState(unread, unreadBtnId, unreadText);
-    addToUnread.applyClone(elem);
-    checkIfUnreadIsEmpty()
-    checkIfReadIsEmpty()
+  if(e.target.classList.contains('close')){
+    dialogBookForm.close()
   }
-}
-
-function Empty(isRead, isSetText){
-    this.isRead = isRead
-    this.isSetText = isSetText
-
-    this.setText = function(){
-        this.isRead.innerHTML = `<div class="empty">&#128722;</div>`
-    }
-}
-
-let readIsEmpty = new Empty()
-function checkIfReadIsEmpty(){
-    const readLen = [...read.children].length;
-    
-    if (readLen == 0) {
-        readIsEmpty = new Empty(read, true);
-        readIsEmpty.setText();
-    } else if (readIsEmpty.isSetText && readLen == 2) {
-        readIsEmpty = new Empty(read, false);
-        read.querySelector('.empty').remove()
-    }
-}
-
-let unreadIsEmpty = new Empty()
-function checkIfUnreadIsEmpty(){
-    const unreadLen = [...unread.children].length;
-
-    if (unreadLen === 0) {
-        unreadIsEmpty = new Empty(unread, true);
-        unreadIsEmpty.setText();
-    } else if(unreadIsEmpty.isSetText && unreadLen == 2){
-        unreadIsEmpty = new Empty(unread, false);
-        unread.querySelector('.empty').remove()
-    }
-}
-
-function removeBookFromLibrary(id) {
-  for (let j = 0; j < myLibrary.length; j++) {
-    if (id === myLibrary[j].id) {
-      myLibrary.splice(j, 1);
-      i--;
-      break;
-    }
-  }
-}
+})

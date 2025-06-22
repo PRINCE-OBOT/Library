@@ -8,46 +8,84 @@
     <link rel="stylesheet" href="./pages/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Librar<span>y&#128193;</span></h1>
-        <button class="btn-add-book"><span>+</span> Add book</button>
-            
-        <div class="main">
-            <h2 class="unread-title">Unread (Pending)</h2>
-            <div class="unread">
+   <div class="container">
+    <header>
+        <svg class="book-logo"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 50">
+             <g id="book">
+                 <path class="rs-book" d="M34,20 l-30,-10 l0,30 l30,-10 z" />
+                 <path class="ls-book" d="M8,10 l30,10 l0,10 l-30,10" />
+                 <circle cx="37.5" cy="12" r="2" />
+                 <text y="28">
+                    <tspan x="0" class="ls-text">Libra</tspan>
+                    <tspan x="38" class="rs-text">ry</tspan>
+                </text>
+             </g>
+        </svg>
+        <p class="sort-book">Sort your books...</p>
+    </header>
+    <main class="book-container">
+        <template id="book-template">
+            <div class="book">
+                <div class="cover-page-bg-img">
+                <img class="icon-remove" src="./images/delete-circle-outline.svg" alt="delete-book">
+                </div>
+                <ul class="book-details">
+                   <li><span><img class="author-icon" src="./images/book-account.svg" alt="author"></span><span class="author"></span></li>
+                   <li><span><img class="title-icon" src="./images/subtitles.svg" alt="title"></span><span class="title"></span></li>
+                   <li><span><img class="num-of-page-icon" src="./images/message.svg" alt="number-of-page"> </span><span class="num-of-page"></span></li>
+                   <li><input class="read-status" type="checkbox"><p class="display-read-status"></p></li>
+                   <li class="star-rating-container">
+                    <svg class="star" data-index="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512">
+                        <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                    </svg>
+                    <svg class="star" data-index="2" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512">
+                        <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                    </svg>
+                    <svg class="star" data-index="3" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512">
+                        <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                    </svg>
+                    <svg class="star" data-index="4" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512">
+                        <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                    </svg>
+                    <svg class="star" data-index="5" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512">
+                        <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                    </svg>
+                   </li>
+                </ul>
             </div>
-            <h2 class="title-read">Read (Completed)</h2>
-            <div class="read">
-            </div>
-        </div>
-    </div>
-    <dialog closedby="any">
-    <form action="" id="book-form">
-        <div>
-            <label for="author">Author</label>
-            <input type="text" id="author" placeholder="Prince" required>
-        </div>
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" placeholder="Tomorrow Too Far" required>
-        </div>
-        <div>
-            <label for="num_of_pages">Number of Pages</label>
-            <input type="number" id="num_of_pages" placeholder="35" required>
-        </div>
-        <div class="checkbox-wrapper">
-            <input type="checkbox" id="is-read">
-            <label for="is-read">Check <em>if</em> you have read the book</label>
-        </div>
-        <div>
-            <label for="img_cover_page">Include book cover page (provide img src path)</label>
-            <input type="text" id="img_cover_page" placeholder="url image path">
-        </div>
-        <div>
-            <button class="btn-cancel" type="button">Cancel</button>
-            <button class="btn-submit" formmethod="dialog" value="submit">Submit</button>
-        </div>
-    </form>
-    </dialog>
+        </template>
+        <button class="btn-add-book">Add book</button>
+    </main>
+        <dialog class="dialog-book-form" closedby="any">
+            <form action="" class="book-form">
+                <h4>Field with asterisk (*) are compulsory</h4>
+                <div>
+                    <label for="author">Author*</label>
+                    <input type="text" id="author" required>
+                </div>
+                <div>
+                    <label for="title">Title*</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div>
+                    <label for="num-of-page">Number of pages*</label>
+                    <input type="number" id="num-of-page" required>
+                </div>
+                <div class="read-status-container">
+                    <input type="checkbox" id="read-status">
+                    <label for="read-status">Check <em>if</em> you have read the book</label>
+                </div>
+                <div>
+                    <label for="image">Include image (It will be display as the cover page)</label>
+                    <input type="text" id="image">
+                </div>
+                <div class="button-form">
+                    <button class="close" type="button">Close</button>
+                    <button class="send">Send</button>
+                    <button class="reset" type="reset">Reset</button>
+                </div>
+            </form>
+        </dialog>
+   </div>
 </body>
 </html>
