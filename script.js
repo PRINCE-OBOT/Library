@@ -11,9 +11,9 @@ class BookDetails {
 }
 
  const books = [
-   new BookDetails("Nandini Nayar","The Story School","45",true,"../image/images-1.jpg", crypto.randomUUID(), 4),
-   new BookDetails("Richard Girling","The Longest Story","1902", false,"../image/images-2.jpg",crypto.randomUUID(), 1),
-   new BookDetails("Luke Jonah","The Bed Book of Short Stories","89", true,"../image/images.jpg",crypto.randomUUID(), 5)
+   new BookDetails("Nandini Nayar","The Story School","45",true,"./image/images-1.jpg", crypto.randomUUID(), 4),
+   new BookDetails("Richard Girling","The Longest Story","1902", false,"./image/images-2.jpg",crypto.randomUUID(), 1),
+   new BookDetails("Luke Jonah","The Bed Book of Short Stories","89", true,"./image/images.jpg",crypto.randomUUID(), 5)
  ];
 
   const bookContainer = document.querySelector('.book-container')
