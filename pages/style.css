@@ -98,6 +98,7 @@ body{
 }
 .container{
     position: relative;
+    min-width: fit-content;
 }
 header{
     min-height: 100px;
@@ -215,7 +216,7 @@ ul,li{
     bottom: 20px;
     display: block;
     margin-left: auto;
-    transform: translateX(40px);
+    /* transform: translateX(5px); */
     box-shadow: var(--box-shadow);
     outline: 2px solid var(--dark-grey);
     outline-offset: 2px;
@@ -226,7 +227,7 @@ ul,li{
         --pri-accent-clr :#40453b;
     }
     &:active{
-        transform: scale(0.93) translateX(40px);
+        /* transform: scale(0.93) translateX(5px); */
     }
 }
 .dialog-book-form{
