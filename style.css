@@ -121,7 +121,7 @@ header{
     color: transparent;
 }
 .book-container{
-    background-color: var(--transparent-black);
+    background-color: var(--white);
     position: relative;
     max-width: 600px;
     margin: 0 auto 0;
