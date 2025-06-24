@@ -29,7 +29,7 @@ p {
   --sec-accent-clr: rgb(242, 246, 239);
   --white: #fff;
   --black: #000;
-  --dark-grey : #667359;
+  --dark-grey : #86957a;
   --icon-remove-clr: rgb(164, 65, 65);
   --transparent-black : rgb(74, 75, 73, 0.3);
 
@@ -38,7 +38,7 @@ p {
    --pd-lg : 20px;
 
    /* gap */
-   --gap-lg : 20px;
+   --gap-lg : 30px;
    --gap-sm : 10px;
 
   /* opacity */
@@ -126,6 +126,7 @@ header{
     width: fit-content;
     margin: 0 auto 0;
     padding: var(--pd-lg);
+    border-radius: 0 0 var(--br-sm) var(--br-sm);
 }
 .book{
     background-color: var(--sec-accent-clr);
@@ -171,7 +172,7 @@ ul,li{
     }
 }
 .author-icon, .title-icon, .num-of-page-icon, .icon-remove, .star{
-    height: 40px;
+    height: 35px;
 }
 .author, .title, .num-of-page{
     text-wrap: nowrap;
@@ -210,14 +211,16 @@ ul,li{
     padding: var(--pd-md) 30px;
     border-radius: var(--br-sm);
     background: linear-gradient(90deg,  var(--pri-accent-clr) 80%, var(--dark-grey));
-    color: var(--dark-grey);
+    color: var(--black);
+    letter-spacing: 2px;
     border: none;
-    font-weight: 900;
+    font-weight: 400;
+    font-size: var(--fs-md);
     position: sticky;
     bottom: 20px;
     display: block;
     margin-left: auto;
-    /* transform: translateX(5px); */
+    transform: translateX(5px);
     box-shadow: var(--box-shadow);
     outline: 2px solid var(--dark-grey);
     outline-offset: 2px;
@@ -226,9 +229,10 @@ ul,li{
     &:hover{
         --dark-grey : #65cc0a;
         --pri-accent-clr :#40453b;
+        --black : var(--dark-grey);
     }
     &:active{
-        /* transform: scale(0.93) translateX(5px); */
+        transform: scale(0.93) translateX(5px);
     }
 }
 .dialog-book-form{
@@ -284,6 +288,9 @@ ul,li{
         background-color: var(--dark-grey);
         &:focus{
             background-color: var(--white);
+        }
+        &::placeholder{
+            color: var(--white);
         }
     }
     input{
