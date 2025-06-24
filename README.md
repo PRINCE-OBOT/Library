@@ -9,6 +9,5 @@ A simple library that is basically build to keep track of books user have read o
 ## Features
 -   Remove a book
 -   Add to read
--   Undo - by sending it back to Unread
 -   Collect custom book information 
 -   Add input to receive the url path of the image
