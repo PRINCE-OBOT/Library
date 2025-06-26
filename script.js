@@ -32,18 +32,18 @@ class BookFinder{
     return books.findIndex((book)=> book.id === bookId )
   }
 }
-const findIndexOfBook = new BookFinder()
+const bookFinder = new BookFinder()
 
 class RateController {
   rateBook({book, bookId, starIndex}){
     book.querySelectorAll('.star').forEach((star)=> star.classList.toggle('fill-star', star.dataset.index <= starIndex));
-    const bookInArr = books[findIndexOfBook.findIndexOfBookInArr(bookId)]
+    const bookInArr = books[bookFinder.findIndexOfBookInArr(bookId)]
     bookInArr.updateDetails("bookRate", starIndex);
   }
 
   removeAllRating({book, bookId}){
     book.querySelectorAll('.star').forEach((star)=> star.classList.remove('fill-star'));
-    const bookInArr = books[findIndexOfBook.findIndexOfBookInArr(bookId)]
+    const bookInArr = books[bookFinder.findIndexOfBookInArr(bookId)]
     bookInArr.updateDetails("bookRate", 0);
   }
 }
@@ -56,7 +56,7 @@ class ReadStatus {
 
   displayReadStatus({book, bookId, readStatus} ){
     book.querySelector('.display-read-status').textContent = this.getReadStatus(readStatus)
-    const bookInArr = books[findIndexOfBook.findIndexOfBookInArr(bookId)];
+    const bookInArr = books[bookFinder.findIndexOfBookInArr(bookId)];
     bookInArr.updateDetails('isRead', readStatus)
   }
 }
@@ -129,7 +129,7 @@ class BookController {
 
   removeBookInArrAndPage({ book, bookId }) {
     book.remove();
-    books.splice(findIndexOfBook.findIndexOfBookInArr(bookId), 1);
+    books.splice(bookFinder.findIndexOfBookInArr(bookId), 1);
   }
 
   getBookFromPage(target) {
@@ -171,9 +171,9 @@ class Render extends BookController{
       if (e.target.classList.contains("star")) {
         const { book, bookId } = bookController.getBookFromPage(e.target);
 
-        if (!books[findIndexOfBook.findIndexOfBookInArr(bookId)].isRead) {
+        if (!books[bookFinder.findIndexOfBookInArr(bookId)].isRead) {
           alert(
-            `You have to read "${books[findIndexOfBook.findIndexOfBookInArr(bookId)].title}" before rating it`
+            `You have to read "${books[bookFinder.findIndexOfBookInArr(bookId)].title}" before rating it`
           );
           return;
         }
