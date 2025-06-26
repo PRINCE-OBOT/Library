@@ -238,7 +238,7 @@ ul,li{
     transform: translateX(5px);
     box-shadow: var(--box-shadow);
     outline: 2px solid var(--dark-grey);
-    outline-offset: 2px;
+    outline-offset: 3px;
     transition: 200ms;
     will-change: transform;
     &:hover{

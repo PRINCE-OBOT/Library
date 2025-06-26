@@ -13,7 +13,7 @@ class BookDetails {
 const books = [
   new BookDetails("Nandini Nayar","The Story School","45",true,"./images/images-1.jpg", crypto.randomUUID(), 4),
   new BookDetails("Richard Girling","The Longest Story","1902", false,"./images/images-2.jpg",crypto.randomUUID(), 1),
-  new BookDetails("Luke Jonah","The Bed Book of Short Stories","89", true,"./images/images.jpg",crypto.randomUUID(), 5),
+  new BookDetails("Luke Jonah","The Bed BookController of Short Stories","89", true,"./images/images.jpg",crypto.randomUUID(), 5),
   new BookDetails("Julia Debbalisim","The Gruffallo","56", false,"./images/grufallo.jpg",crypto.randomUUID(), 4),
   new BookDetails("The Spookster","Plus A Short","96", true,"./images/plus.jpg",crypto.randomUUID(), 1),
   new BookDetails("Romeo Julieth","At First Sight","1096", false,"./images/sight.jpg",crypto.randomUUID(), 2),
@@ -23,20 +23,31 @@ const books = [
   new BookDetails("Daniel Errico","When Do Hippos Play","300", true,"./images/when.jpg",crypto.randomUUID(), 2)
 ];
 
-class FindIndexOfBook{
+BookDetails.prototype.updateDetails = function(property, value){
+  this[property] = value
+}
+
+class BookFinder{
   findIndexOfBookInArr(bookId){
     return books.findIndex((book)=> book.id === bookId )
   }
 }
-const findIndexOfBook = new FindIndexOfBook()
+const findIndexOfBook = new BookFinder()
 
-class BookRate {
-  bookRate({book, bookId, starIndex}){
+class RateController {
+  rateBook({book, bookId, starIndex}){
     book.querySelectorAll('.star').forEach((star)=> star.classList.toggle('fill-star', star.dataset.index <= starIndex));
-    books[findIndexOfBook.findIndexOfBookInArr(bookId)].bookRate = starIndex
+    const bookInArr = books[findIndexOfBook.findIndexOfBookInArr(bookId)]
+    bookInArr.updateDetails("bookRate", starIndex);
+  }
+
+  removeAllRating({book, bookId}){
+    book.querySelectorAll('.star').forEach((star)=> star.classList.remove('fill-star'));
+    const bookInArr = books[findIndexOfBook.findIndexOfBookInArr(bookId)]
+    bookInArr.updateDetails("bookRate", 0);
   }
 }
-const bookRate = new BookRate()
+const rateController = new RateController()
 
 class ReadStatus {
   getReadStatus(readStatus) {
@@ -45,44 +56,21 @@ class ReadStatus {
 
   displayReadStatus({book, bookId, readStatus} ){
     book.querySelector('.display-read-status').textContent = this.getReadStatus(readStatus)
-    books[findIndexOfBook.findIndexOfBookInArr(bookId)].isRead = readStatus
+    const bookInArr = books[findIndexOfBook.findIndexOfBookInArr(bookId)];
+    bookInArr.updateDetails('isRead', readStatus)
   }
 }
 const readStatus = new ReadStatus()
 
-class GetBook {
-  constructor(){
-    this.bookTemplate = document.querySelector("#book-template");
+class FormController {
+  clearForm({author, title, numOfPage, readStatus, coverPageBg}){
+    author.value = ''
+    title.value = ''
+    numOfPage.value = ''
+    readStatus.checked = false
+    coverPageBg.value = ''
   }
-  
-  getBookFromPage(target) {
-    const book = target.closest(".book");
-    return { book, bookId: book.getAttribute("id") };
-  }
-  
-  getBookFromTemplate(){
-    return this.bookTemplate.content.querySelector('.book').cloneNode(true)
-  }
-}
-const getBook = new GetBook()
 
-class RemoveRating{
-  removeAllRating({book, bookId}){
-    book.querySelectorAll('.star').forEach((star)=> star.classList.remove('fill-star'));
-    books[(new FindIndexOfBook).findIndexOfBookInArr(bookId)].bookRate = 0
-  }
-}
-const removeRating = new RemoveRating()
-  
-class RemoveBook{
-    removeBookInArrAndPage({book, bookId}){
-    book.remove()
-    books.splice(findIndexOfBook.findIndexOfBookInArr(bookId), 1)
-  }
-}
-const removeBook = new RemoveBook()
-
-class CheckRequirement {
   checkIfInputMeetRequirement(dialogBookForm){
     const requiredInput = dialogBookForm.querySelectorAll("input[required]")
     for(const input of requiredInput){
@@ -94,31 +82,24 @@ class CheckRequirement {
     }
   }
 }
-const checkRequirement = new CheckRequirement()
+const formController = new FormController()
 
-class Clear {
-  clearForm({author, title, numOfPage, readStatus, coverPageBg}){
-    author.value = ''
-    title.value = ''
-    numOfPage.value = ''
-    readStatus.checked = false
-    coverPageBg.value = ''
-  }
-}
-const clear = new Clear()
-
-class AddBook {
+class BookController {
+  #bookTemplate
   constructor() {
     this.bookContainer = document.querySelector(".book-container");
+    this.#bookTemplate = document.querySelector("#book-template");
   }
 
-  addNewBook({author, title, numOfPage, readStatus, coverPageBg}){
-    books.unshift(new BookDetails(author, title, numOfPage, readStatus, coverPageBg, crypto.randomUUID()));
-    this.addBookToPage(books[0])
+  addNewBook({ author, title, numOfPage, readStatus, coverPageBg }) {
+    books.unshift(
+      new BookDetails(author,title,numOfPage,readStatus,coverPageBg,crypto.randomUUID())
+    );
+    this.addBookToPage(books[0]);
   }
 
   addBookToPage(bookDetails) {
-    const book = getBook.getBookFromTemplate();
+    const book = this.getBookTemplate();
     const coverPageBgImg = book.querySelector(".cover-page-bg-img");
     const author = book.querySelector(".author");
     const title = book.querySelector(".title");
@@ -136,21 +117,36 @@ class AddBook {
     displayReadStatus.textContent = readStatus.getReadStatus(isRead.checked);
 
     if (isRead.checked) {
-      const { book, bookId } = getBook.getBookFromPage(star);
-      bookRate.bookRate({ book, bookId, starIndex: bookDetails.bookRate });
+      const { book, bookId } = this.getBookFromPage(star);
+      rateController.rateBook({ book, bookId, starIndex: bookDetails.bookRate });
     } else if (!isRead.checked) {
-      const { book, bookId } = getBook.getBookFromPage(star);
-      removeRating.removeAllRating({ book, bookId });
+      const { book, bookId } = this.getBookFromPage(star);
+      rateController.removeAllRating({ book, bookId });
     }
 
     this.bookContainer.insertAdjacentElement("afterBegin", book);
   }
-}
-const addBook = new AddBook()
-books.forEach(addBook.addBookToPage.bind(addBook));
 
-// `extend` AddBOok to have access to `bookContainer`
-class Render extends AddBook{
+  removeBookInArrAndPage({ book, bookId }) {
+    book.remove();
+    books.splice(findIndexOfBook.findIndexOfBookInArr(bookId), 1);
+  }
+
+  getBookFromPage(target) {
+    const book = target.closest(".book");
+    return { book, bookId: book.getAttribute("id") };
+  }
+
+  getBookTemplate() {
+    return this.#bookTemplate.content.querySelector(".book").cloneNode(true);
+  }
+}
+
+const bookController = new BookController()
+books.forEach(bookController.addBookToPage.bind(bookController));
+
+// `extend` Book to have access to `bookContainer`
+class Render extends BookController{
   constructor(){
     super()
     this.dialogBookForm = document.querySelector(".dialog-book-form");
@@ -160,20 +156,20 @@ class Render extends AddBook{
   bindEvent(){
     this.bookContainer.addEventListener("click", (e) => {
       if (e.target.classList.contains("icon-remove")) {
-        const { book, bookId } = getBook.getBookFromPage(e.target);
-        removeBook.removeBookInArrAndPage({ book, bookId });
+        const { book, bookId } = bookController.getBookFromPage(e.target);
+        bookController.removeBookInArrAndPage({ book, bookId });
       }
 
       if (e.target.classList.contains("read-status")) {
-        const { book, bookId } = getBook.getBookFromPage(e.target);
+        const { book, bookId } = bookController.getBookFromPage(e.target);
         readStatus.displayReadStatus({book,bookId,readStatus: e.target.checked,
         });
 
-        if (!e.target.checked) removeRating.removeAllRating({ book, bookId });
+        if (!e.target.checked) rateController.removeAllRating({ book, bookId });
       }
 
       if (e.target.classList.contains("star")) {
-        const { book, bookId } = getBook.getBookFromPage(e.target);
+        const { book, bookId } = bookController.getBookFromPage(e.target);
 
         if (!books[findIndexOfBook.findIndexOfBookInArr(bookId)].isRead) {
           alert(
@@ -181,7 +177,7 @@ class Render extends AddBook{
           );
           return;
         }
-        bookRate.bookRate({ book, bookId, starIndex: e.target.dataset.index });
+        rateController.rateBook({ book, bookId, starIndex: e.target.dataset.index });
       }
 
       if (e.target.classList.contains("btn-add-book")) {
@@ -192,12 +188,12 @@ class Render extends AddBook{
     this.bookForm.addEventListener('click', (e)=>{
       if(e.target.classList.contains('send')){
 
-        if(checkRequirement.checkIfInputMeetRequirement(this.dialogBookForm) === 'empty') return
+        if(formController.checkIfInputMeetRequirement(this.dialogBookForm) === 'empty') return
 
         const [author, title, numOfPage, readStatus, coverPageBg] = this.bookForm.elements
-        addBook.addNewBook({author : author.value, title : title.value, numOfPage : numOfPage.value, readStatus : readStatus.checked, coverPageBg : coverPageBg.value})
+        bookController.addNewBook({author : author.value, title : title.value, numOfPage : numOfPage.value, readStatus : readStatus.checked, coverPageBg : coverPageBg.value})
         this.dialogBookForm.close()
-        clear.clearForm({author, title, numOfPage, readStatus, coverPageBg})
+        formController.clearForm({author, title, numOfPage, readStatus, coverPageBg})
       }
 
       if(e.target.classList.contains('close')){
@@ -208,14 +204,3 @@ class Render extends AddBook{
 }
 
 (new Render()).bindEvent()
-
-
-
-
-
-
-
-
-
-
-
