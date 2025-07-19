@@ -202,5 +202,4 @@ class Render extends BookController{
     })
   }
 }
-
 (new Render()).bindEvent()
